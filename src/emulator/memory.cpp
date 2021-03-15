@@ -28,7 +28,7 @@ namespace emulator
     }
 
     /* read and write operations */
-    uint8_t &memory::operator[](address_type address)
+    u8 &memory::operator[](address_type address)
     {
         if (address < CODE_ADDRESS || address >= MEMORY_SIZE)
             throw memory_access_error(address);
@@ -36,7 +36,7 @@ namespace emulator
         return m_ram[address];
     }
 
-    const uint8_t &memory::operator[](address_type address) const
+    const u8 &memory::operator[](address_type address) const
     {
         if (address < CODE_ADDRESS || address >= MEMORY_SIZE)
             throw memory_access_error(address);
@@ -44,7 +44,7 @@ namespace emulator
         return m_ram[address];
     }
 
-    void memory::load_machine_code(const std::vector<uint8_t> &binary)
+    void memory::load_machine_code(const std::vector<u8> &binary)
     {
         std::copy_n(std::begin(binary), std::size(binary), std::begin(m_ram) + CODE_ADDRESS);
     }
