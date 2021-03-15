@@ -8,7 +8,13 @@ set(CMAKE_CXX_STANDARD 20)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-file(GLOB SRC_FILES ${INC_DIR}/*.hpp ${SRC_DIR}/*.cpp)
+set(EMULATOR_SOURCES
+        ${INC_DIR}/chip8emu/emulator/*.hpp
+        ${SRC_DIR}/emulator/*.cpp)
+
+file(GLOB SRC_FILES
+        ${EMULATOR_SOURCES}
+        ${SRC_DIR}/main.cpp)
 
 add_executable(chip8_emu ${SRC_FILES})
 set_project_warnings(chip8_emu)
