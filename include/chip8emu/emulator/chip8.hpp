@@ -1,5 +1,5 @@
-#ifndef CHIP8_EMU_CHIP_8_HPP
-#define CHIP8_EMU_CHIP_8_HPP
+#ifndef CHIP8_EMU_CHIP8_HPP
+#define CHIP8_EMU_CHIP8_HPP
 
 #include <chip8emu/emulator/device_bus.hpp>
 #include <chip8emu/emulator/cartridge.hpp>
@@ -28,4 +28,4 @@ namespace emulator
     };
 }
 
-#endif // CHIP8_EMU_CHIP_8_HPP
+#endif // CHIP8_EMU_CHIP8_HPP

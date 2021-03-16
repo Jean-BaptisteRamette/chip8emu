@@ -4,6 +4,7 @@
 #include <chip8emu/inttypes.hpp>
 #include <stdexcept>
 #include <cstdint>
+#include <random>
 #include <array>
 
 
@@ -76,6 +77,10 @@ namespace emulator
     private:
         /* link to other devices such as the RAM */
         device_bus& m_bus;
+
+        /* PRNG for CXKK instruction */
+        std::mt19937 mt;
+        std::uniform_int_distribution<u8> distribution;
 
         /*!
          * @brief 8-bit general purpose registers

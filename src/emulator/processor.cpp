@@ -9,7 +9,9 @@ namespace emulator
 #define JMP_NEXT(pc) pc += 2  // jumps to the next instruction
 
 processor::processor(device_bus &bus) noexcept
-        : m_bus{bus}, V{}, stack{}, PC(memory::CODE_ADDRESS)
+        : m_bus{bus},
+        mt(std::random_device()()), distribution(0, 255), // PRNG
+        V{}, stack{}, PC(memory::CODE_ADDRESS)
 {}
 
 void processor::fetch_instruction() noexcept
@@ -104,38 +106,260 @@ void processor::invalid_opcode() const
     throw opcode_decoding_error(opcode);
 }
 
-void processor::instr00E0() const {}
-void processor::instr00EE() noexcept {}
-void processor::instr1NNN() noexcept {}
-void processor::instr2NNN() noexcept {}
-void processor::instr3XKK() noexcept {}
-void processor::instr4XKK() noexcept {}
-void processor::instr5XY0() noexcept {}
-void processor::instr6XKK() noexcept {}
-void processor::instr7XKK() noexcept {}
-void processor::instr8XY0() noexcept {}
-void processor::instr8XY1() noexcept {}
-void processor::instr8XY2() noexcept {}
-void processor::instr8XY3() noexcept {}
-void processor::instr8XY4() noexcept {}
-void processor::instr8XY5() noexcept {}
-void processor::instr8XY6() noexcept {}
-void processor::instr8XY7() noexcept {}
-void processor::instr8XYE() noexcept {}
-void processor::instr9XY0() noexcept {}
-void processor::instrANNN() noexcept {}
-void processor::instrBNNN() noexcept {}
-void processor::instrCXKK() noexcept {}
-void processor::instrDXYN() noexcept {}
-void processor::instrEX9E() noexcept {}
-void processor::instrEXA1() noexcept {}
-void processor::instrFX0A() noexcept {}
-void processor::instrFX07() noexcept {}
-void processor::instrFX1E() noexcept {}
-void processor::instrFX15() noexcept {}
-void processor::instrFX18() noexcept {}
-void processor::instrFX29() noexcept {}
-void processor::instrFX33() noexcept {}
-void processor::instrFX55() noexcept {}
-void processor::instrFX65() noexcept {}
+void processor::instr00E0() const
+{
+    /* clear screen memory */
+}
+
+void processor::instr00EE() noexcept
+{
+    /* return from a subroutine */
+    --SP;
+    PC = stack[SP];
+}
+
+void processor::instr1NNN() noexcept
+{
+    /* jumps to instruction at address NNN */
+    PC = opcode & 0x0FFFu;
+}
+void processor::instr2NNN() noexcept
+{
+    /* return from a subroutine */
+    stack[SP] = PC;
+    ++SP;
+    PC = opcode & 0x0FFFu;
+}
+
+void processor::instr3XKK() noexcept
+{
+    /* if the value of register VX isn't equal to the value KK, skip instruction */
+    const auto VX { V[OPCODE_GETX(opcode)] };
+    const auto KK { opcode & 0xFFu };
+
+    if (VX == KK)
+        JMP_NEXT(PC);
+}
+void processor::instr4XKK() noexcept
+{
+    /* if the value of register X isn't equal to the value KK, skip instruction */
+    const auto VX { V[OPCODE_GETX(opcode)] };
+    const auto KK { opcode & 0x00FFu };
+
+    if (VX != KK)
+        JMP_NEXT(PC);
+}
+void processor::instr5XY0() noexcept
+{
+    /* if register X and register Y are equal, skip instruction */
+    const auto VX { V[OPCODE_GETX(opcode)] };
+    const auto VY { V[OPCODE_GETY(opcode)] };
+
+    if (VX == VY)
+        JMP_NEXT(PC);
+}
+
+void processor::instr6XKK() noexcept
+{
+    /* Sets register VX to the value KK */
+    V[OPCODE_GETX(opcode)] = opcode & 0x00FFu;
+}
+
+void processor::instr7XKK() noexcept
+{
+    /* Adds the value KK to register X */
+    V[OPCODE_GETX(opcode)] += opcode & 0x00FFu;
+}
+
+void processor::instr8XY0() noexcept
+{
+    /* Sets VX to VY */
+    V[OPCODE_GETX(opcode)] = V[OPCODE_GETY(opcode)];
+}
+
+void processor::instr8XY1() noexcept
+{
+    /* Sets VX to VX or VY */
+    V[OPCODE_GETX(opcode)] |= V[OPCODE_GETY(opcode)];
+}
+
+void processor::instr8XY2() noexcept
+{
+    /* Sets VX to VX and VY */
+    V[OPCODE_GETX(opcode)] &= V[OPCODE_GETY(opcode)];
+}
+
+void processor::instr8XY3() noexcept
+{
+    /* Sets VX to VX xor VY */
+    V[OPCODE_GETX(opcode)] ^= V[OPCODE_GETY(opcode)];
+}
+
+void processor::instr8XY4() noexcept
+{
+    /* Adds values of register X and register Y then set carry bit if needed */
+    u8 &VX { V[OPCODE_GETX(opcode)] };
+    const u8 &VY { V[OPCODE_GETY(opcode)] };
+
+    const auto result { static_cast<u16>(VX + VY) };
+
+    // Set the carry bit
+    V[0xF] = result > 255;
+
+    // Keep lowest byte
+    VX = result & 0xFFu;
+}
+
+void processor::instr8XY5() noexcept
+{
+    /* Subtracts register Y from register X and sets carry flag */
+    const auto X { OPCODE_GETX(opcode) };
+    const auto Y { OPCODE_GETY(opcode) };
+
+    V[0xF] = V[X] > V[Y];
+    V[X] -= V[Y];
+}
+
+void processor::instr8XY6() noexcept
+{
+    // Sets VX to VX divided by two, and set carry bit if needed:
+    // as we shift by one to the right, carry flag is set if the LSB is 1
+    const auto X { OPCODE_GETX(opcode) };
+
+    V[0xF] = V[X] & 1u;
+    V[X] >>= 1u;
+}
+
+void processor::instr8XY7() noexcept
+{
+    /* Sets register X to VY - VX and sets carry flag if needed */
+    const auto X { OPCODE_GETX(opcode) };
+    const auto Y { OPCODE_GETY(opcode) };
+
+    V[0xF] = V[Y] > V[X];
+    V[X] = V[Y] - V[X];
+}
+
+void processor::instr8XYE() noexcept
+{
+    // Sets VX to VX multiplied by two, and set carry bit if needed:
+    // as we shift by one to the left, carry flag is set if the MSB is 1
+    const auto X { OPCODE_GETX(opcode) };
+
+    V[0xF] = V[X] & 0x80u;
+    V[X] <<= 1u;
+}
+
+void processor::instr9XY0() noexcept
+{
+    /* Skips the next instruction if register X isn't equal to register Y */
+    const u16 VX { V[OPCODE_GETX(opcode)] };
+    const u16 VY { V[OPCODE_GETY(opcode)] };
+
+    if (VX != VY)
+        JMP_NEXT(PC);
+}
+
+void processor::instrANNN() noexcept
+{
+    /* Sets I to the address NNN */
+    I = opcode & 0x0FFFu;
+}
+
+void processor::instrBNNN() noexcept
+{
+    /* Jumps to the address V0 + NNN */
+    PC = V[0] + (opcode & 0x0FFFu);
+}
+
+void processor::instrCXKK() noexcept
+{
+    // Sets register X to a random number a
+    // 0 <= a <= 255 then AND a with the value KK
+    const auto X  { OPCODE_GETX(opcode) };
+    const auto KK { static_cast<u8>(opcode & 0xFFu) };
+    V[X] = distribution(mt) & KK;
+}
+
+void processor::instrDXYN() noexcept
+{
+    /* Draw sprite at coordinates VX, VY */
+}
+
+void processor::instrEX9E() noexcept
+{
+    /* Skips instruction if key is pressed */
+}
+
+void processor::instrEXA1() noexcept
+{
+    /* Skips instruction if key is not pressed */
+}
+
+void processor::instrFX07() noexcept
+{
+    /* Sets VX to the value of the delay timer */
+    V[OPCODE_GETX(opcode)] = delay_timer;
+}
+
+void processor::instrFX0A() noexcept
+{
+    /* Waits for a key to be pressed and stores it in VX */
+}
+
+void processor::instrFX15() noexcept
+{
+    /* Set delay timer to VX */
+    delay_timer = V[OPCODE_GETX(opcode)];
+}
+
+void processor::instrFX18() noexcept
+{
+    /* Set sound timer to VX */
+}
+
+void processor::instrFX1E() noexcept
+{
+    /* Adds VX to I */
+    I += V[OPCODE_GETX(opcode)];
+}
+
+void processor::instrFX29() noexcept
+{
+    /* Sets I to the location of the glyph corresponding to the digit of value VX */
+    const auto digit { V[OPCODE_GETX(opcode)] };
+    const auto digit_glyph_offset { memory::FONT_ADDRESS + digit * memory::FONT_CHAR_SIZE };
+
+    I = static_cast<u16>(digit_glyph_offset);
+}
+
+void processor::instrFX33() noexcept
+{
+    /* Stores BCD representation */
+    auto VX { V[OPCODE_GETX(opcode)] };
+
+    m_bus.ram[I + 2] = VX % 10;
+    VX /= 10;                    // Ones place, (1st digit from the right)
+    m_bus.ram[I + 1] = VX % 10;
+    VX /= 10;                    // Tens place, (2nd digit from the right)
+    m_bus.ram[I] = VX % 10;      // Hundreds place, (3rd digit from the right)
+}
+
+void processor::instrFX55() noexcept
+{
+    /* Dump registers values in memory from address I */
+    const auto X { OPCODE_GETX(opcode) };
+
+    for (u8 reg{0}; reg <= X; ++reg)
+        m_bus.ram[I + reg] = V[reg];
+}
+
+void processor::instrFX65() noexcept
+{
+    /* Fills register from V0 to VX with values from memory starting at address I */
+    const auto X { OPCODE_GETX(opcode) };
+
+    for (u8 reg {}; reg <= X; ++reg)
+        V[reg] = m_bus.ram[I + reg];
+}
 }

@@ -30,11 +30,13 @@ namespace emulator
         /*!
          * Chip8 memory has a range of 4095 bytes.
          * The machine code must be loaded at address 512.
-         * The memory also contains a font already at address 80.
+         * The memory also contains a font at address 80.
+         * The font represents hex digits from 0-F, each digit is 5 bytes long in memory
          */
 
     public:
-        static constexpr address_type SIZE  {0xFFF };
+        static constexpr address_type SIZE { 0xFFF };
+        static constexpr address_type FONT_CHAR_SIZE { 5 };
         static constexpr address_type FONT_ADDRESS { 0x50  };
         static constexpr address_type CODE_ADDRESS { 0x200 };
         static constexpr address_type CODE_MAXSIZE { SIZE - CODE_ADDRESS };

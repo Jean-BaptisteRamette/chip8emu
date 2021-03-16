@@ -1,4 +1,4 @@
-#include <chip8emu/emulator/chip_8.hpp>
+#include <chip8emu/emulator/chip8.hpp>
 
 
 namespace emulator
