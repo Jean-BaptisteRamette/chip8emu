@@ -16,14 +16,11 @@ void chip8::remove_cartridge()
 
 void chip8::run()
 {
-    /*
-    bool loop { true };
-
-    while (loop)
+    while (true)
     {
-        break;
+        m_bus.cpu.fetch_instruction();
+        m_bus.cpu.exec_instruction();
     }
-    */
 }
 
 }
