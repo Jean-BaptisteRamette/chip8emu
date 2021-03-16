@@ -30,7 +30,7 @@ namespace emulator
     /* read and write operations */
     u8 &memory::operator[](address_type address)
     {
-        if (address < CODE_ADDRESS || address >= MEMORY_SIZE)
+        if (address < CODE_ADDRESS || address >= SIZE)
             throw memory_access_error(address);
 
         return m_ram[address];
@@ -38,7 +38,7 @@ namespace emulator
 
     const u8 &memory::operator[](address_type address) const
     {
-        if (address < CODE_ADDRESS || address >= MEMORY_SIZE)
+        if (address < CODE_ADDRESS || address >= SIZE)
             throw memory_access_error(address);
 
         return m_ram[address];

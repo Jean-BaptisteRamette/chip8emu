@@ -34,9 +34,10 @@ namespace emulator
          */
 
     public:
+        static constexpr address_type SIZE  {0xFFF };
         static constexpr address_type FONT_ADDRESS { 0x50  };
         static constexpr address_type CODE_ADDRESS { 0x200 };
-        static constexpr address_type MEMORY_SIZE  { 0xFFF };
+        static constexpr address_type CODE_MAXSIZE { SIZE - CODE_ADDRESS };
 
     public:
         memory();
@@ -53,7 +54,7 @@ namespace emulator
         void load_machine_code(const std::vector<u8> &binary);
 
     private:
-        std::array<u8, MEMORY_SIZE> m_ram;
+        std::array<u8, SIZE> m_ram;
     };
 }
 
