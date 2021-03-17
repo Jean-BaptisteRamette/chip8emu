@@ -18,7 +18,8 @@ namespace emulator
         chip8& operator=(chip8&&) = delete;
 
         void insert_cartridge(const cartridge& cartridge);
-        void remove_cartridge();
+
+        [[maybe_unused]] void remove_cartridge();
 
         void run();
 

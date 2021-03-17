@@ -288,15 +288,23 @@ void processor::instrDXYN() noexcept
 
 void processor::instrEX9E() noexcept
 {
-    /* Skips instruction if key is pressed */
+    /* Skips instruction if key VX is pressed */
+    const auto key_index { V[OPCODE_GETX(opcode)] };
+
+    if (m_bus.keypad.key_pressed(key_index))
+        JMP_NEXT(PC);
 }
 
 void processor::instrEXA1() noexcept
 {
     /* Skips instruction if key is not pressed */
+    const auto key_index { V[OPCODE_GETX(opcode)] };
+
+    if (!m_bus.keypad.key_pressed(key_index))
+        JMP_NEXT(PC);
 }
 
-void processor::instrFX07() noexcept
+    void processor::instrFX07() noexcept
 {
     /* Sets VX to the value of the delay timer */
     V[OPCODE_GETX(opcode)] = delay_timer;
@@ -305,6 +313,19 @@ void processor::instrFX07() noexcept
 void processor::instrFX0A() noexcept
 {
     /* Waits for a key to be pressed and stores it in VX */
+    auto& VX { V[OPCODE_GETX(opcode)] };
+
+    for (u8 key_index{0}; key_index < keyboard::KEY_COUNT; ++key_index)
+    {
+        if (m_bus.keypad.key_pressed(key_index))
+        {
+            VX = key_index;
+            return;
+        }
+    }
+
+    // Repeat instruction
+    PC -= 2;
 }
 
 void processor::instrFX15() noexcept
