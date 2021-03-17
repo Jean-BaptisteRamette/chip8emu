@@ -4,8 +4,8 @@
 
 namespace emulator
 {
-#define OPCODE_GETX(opcode) (opcode & 0x0F00u) >> 8u  // OPCODE_GETX(0x8F13) -> 0xF
-#define OPCODE_GETY(opcode) (opcode & 0x00F0u) >> 4u  // OPCODE_GETY(0x8F13) -> 0x1
+#define OPCODE_GETX(opcode) ((opcode) & 0x0F00u) >> 8u  // OPCODE_GETX(0x8F13) -> 0xF
+#define OPCODE_GETY(opcode) ((opcode) & 0x00F0u) >> 4u  // OPCODE_GETY(0x8F13) -> 0x1
 #define JMP_NEXT(pc) pc += 2  // jumps to the next instruction
 
 processor::processor(device_bus &bus) noexcept
