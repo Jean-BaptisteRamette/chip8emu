@@ -34,6 +34,9 @@ void chip8::run()
 
         m_bus.cpu.fetch_instruction();
         m_bus.cpu.exec_instruction();
+
+        /* create SDL Renderer and Texture */
+        m_bus.screen.copy_video_buffer(nullptr, nullptr);
     }
 }
 

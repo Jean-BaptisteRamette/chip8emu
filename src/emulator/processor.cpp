@@ -1,3 +1,4 @@
+#include <chip8emu/emulator/screen_display.hpp>
 #include <chip8emu/emulator/device_bus.hpp>
 #include <chip8emu/emulator/processor.hpp>
 #include <chip8emu/emulator/memory.hpp>
@@ -109,6 +110,7 @@ void processor::invalid_opcode() const
 void processor::instr00E0() const
 {
     /* clear screen memory */
+    m_bus.screen.clear();
 }
 
 void processor::instr00EE() noexcept
@@ -284,6 +286,37 @@ void processor::instrCXKK() noexcept
 void processor::instrDXYN() noexcept
 {
     /* Draw sprite at coordinates VX, VY */
+    const u8 x = V[OPCODE_GETX(opcode)] % screen_display::WIDTH;
+    const u8 y = V[OPCODE_GETY(opcode)] % screen_display::HEIGHT;
+    const u8 height = opcode & 0xFu;
+
+    /* reset carry flag register for collision detection */
+    V[0xF] = 0;
+
+    for (u8 row {}; row < height; ++row)
+    {
+        /* get sprite row to draw */
+        const u8 sprite_row { m_bus.ram[I + row] };
+
+        /* loop through bits from MSB to LSB */
+        for (u8 col {}; col < 8; ++col)
+        {
+            /* x + y * w formula */
+            const u64 pos = (x + col) + screen_display::WIDTH * (y + row);
+
+            /* get video pixel to copy_video_buffer */
+            u32& pixel {m_bus.screen.pixel(pos) };
+
+            if (sprite_row & (0x80u >> col))
+            {
+                /* set carry flag to check for collision if the previous pixel was already on */
+                V[0xF] = (pixel == 0xFFFFFFFF);
+
+                /* xor draw */
+                pixel ^= 0xFFFFFFFF;
+            }
+        }
+    }
 }
 
 void processor::instrEX9E() noexcept

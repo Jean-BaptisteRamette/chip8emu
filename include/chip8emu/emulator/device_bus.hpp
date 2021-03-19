@@ -1,6 +1,7 @@
 #ifndef CHIP8_EMU_DEVICE_BUS_HPP
 #define CHIP8_EMU_DEVICE_BUS_HPP
 
+#include <chip8emu/emulator/screen_display.hpp>
 #include <chip8emu/emulator/processor.hpp>
 #include <chip8emu/emulator/keyboard.hpp>
 #include <chip8emu/emulator/memory.hpp>
@@ -20,6 +21,7 @@ namespace emulator
 
         processor cpu;
         memory ram;
+        screen_display screen;
         keyboard keypad;
     };
 }

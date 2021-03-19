@@ -46,7 +46,7 @@ namespace emulator
         /* decode opcode then call its corresponding instruction */
         void exec_instruction();
 
-        /* update the delay timer */
+        /* copy_video_buffer the delay timer */
         void tick() noexcept;
 
         [[nodiscard]] u8 timer() const noexcept;
