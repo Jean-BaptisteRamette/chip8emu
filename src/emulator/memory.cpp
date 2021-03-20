@@ -30,7 +30,8 @@ namespace emulator
     /* read and write operations */
     u8 &memory::operator[](address_type address)
     {
-        if (address < CODE_ADDRESS || address >= SIZE)
+        // TODO: should the user be able to access memory outside program area, for example to get fontset ?
+        if (address >= SIZE)
             throw memory_access_error(address);
 
         return m_ram[address];
@@ -38,7 +39,7 @@ namespace emulator
 
     const u8 &memory::operator[](address_type address) const
     {
-        if (address < CODE_ADDRESS || address >= SIZE)
+        if (address >= SIZE)
             throw memory_access_error(address);
 
         return m_ram[address];
