@@ -304,7 +304,7 @@ void processor::instrDXYN() noexcept
             /* x + y * w formula */
             const u64 pos = (x + col) + screen_display::WIDTH * (y + row);
 
-            /* get video pixel to copy_video_buffer */
+            /* get video pixel to render_frame */
             u32& pixel {m_bus.screen.pixel(pos) };
 
             if (sprite_row & (0x80u >> col))

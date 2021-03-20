@@ -2,5 +2,6 @@
 
 namespace emulator
 {
-device_bus::device_bus() noexcept : cpu(*this) {}
+device_bus::device_bus(const std::shared_ptr<SDL_Renderer>& renderer_ptr) noexcept :
+    cpu(*this), screen(renderer_ptr) {}
 }

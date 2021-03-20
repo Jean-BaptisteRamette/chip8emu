@@ -10,7 +10,7 @@ namespace emulator
     class chip8
     {
     public:
-        chip8() noexcept = default;
+        chip8(const std::shared_ptr<SDL_Renderer>& renderer_ptr);
         ~chip8() noexcept = default;
         chip8(const chip8&) = delete;
         chip8(chip8&&) = delete;
@@ -21,11 +21,15 @@ namespace emulator
 
         [[maybe_unused]] void remove_cartridge();
 
-        void run();
+        /* handle chip8 specific events, such as keypress */
+        void handle_physical_event(SDL_Event* event);
+
+        /* execute a simple fetch, decode, execute cycle, and does all the rendering work */
+        void execute_cpu_cycle();
 
     private:
         /* communicate with devices */
-        device_bus m_bus;
+        device_bus dev_bus;
     };
 }
 

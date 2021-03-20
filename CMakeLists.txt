@@ -14,9 +14,13 @@ set(EMULATOR_SOURCES
         ${INC_DIR}/chip8emu/emulator/*.hpp
         ${SRC_DIR}/emulator/*.cpp)
 
+set(MAIN_SOURCES
+        ${INC_DIR}/chip8emu/*.hpp
+        ${SRC_DIR}/*.cpp)
+
 file(GLOB SRC_FILES
         ${EMULATOR_SOURCES}
-        ${SRC_DIR}/main.cpp)
+        ${MAIN_SOURCES})
 
 add_executable(chip8_emu ${SRC_FILES})
 set_project_warnings(chip8_emu)

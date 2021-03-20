@@ -2,14 +2,20 @@
 #define CHIP8_EMU_SCREEN_DISPLAY_HPP
 
 #include <chip8emu/inttypes.hpp>
-#include <vector>
 #include <SDL2/SDL.h>
+#include <memory>
+#include <vector>
 
 
 namespace emulator
 {
     class screen_display final
     {
+        struct SDLTextureDestroyer
+        {
+            void operator()(SDL_Texture* t) const noexcept { SDL_DestroyTexture(t); }
+        };
+
     public:
         static constexpr u8 WIDTH { 64 };
         static constexpr u8 HEIGHT { 32 };
@@ -19,7 +25,7 @@ namespace emulator
         static constexpr u32 PITCH { sizeof(u32) * WIDTH };
 
     public:
-        screen_display();
+        explicit screen_display(const std::shared_ptr<SDL_Renderer>& renderer);
         ~screen_display() noexcept = default;
         screen_display(const screen_display &) = delete;
         screen_display(screen_display &&) = delete;
@@ -29,8 +35,8 @@ namespace emulator
         /* clear video buffer */
         void clear();
 
-        /* copy video buffer to texture */
-        void copy_video_buffer(SDL_Renderer* renderer, SDL_Texture* texture) const noexcept;
+        /* copy video buffer to texture and display texture */
+        void render_frame() const noexcept;
 
         /* get mutable pixel from video buffer */
         u32& pixel(u64 pos) noexcept;
@@ -38,6 +44,9 @@ namespace emulator
         /* allow user to resize render target */
 
     private:
+        std::shared_ptr<SDL_Renderer> m_renderer;
+        std::unique_ptr<SDL_Texture, SDLTextureDestroyer> m_texture;
+
         /* Area where the emulator renders in the window */
         SDL_Rect m_render_target { 0, 0, SCALED_WIDTH, SCALED_HEIGHT };
 

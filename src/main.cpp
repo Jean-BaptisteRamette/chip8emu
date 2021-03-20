@@ -1,25 +1,33 @@
 #include <iostream>
-#include <chip8emu/emulator/chip8.hpp>
+#include <chip8emu/window.hpp>
 
-
-int main(int argc, char** argv)
+int main()
 {
-    if (argc < 2)
-    {
-        std::cerr << "[ERROR]: No ROM input file provided !" << std::endl;
-        return EXIT_FAILURE;
-    }
+    /*
+     * Later, the command line argument will only be used for the assembler
+     * The ROM file input is done graphically
+     */
+
 
     try
     {
-        emulator::chip8 emu;
-        emulator::cartridge cartridge(argv[1]);
+        if (SDL_InitSubSystem(SDL_INIT_VIDEO) == -1)
+        {
+            std::cerr << "[ERROR]: Could not initialize SDL video subsystem\n";
+            std::cerr << SDL_GetError() << std::endl;
 
-        emu.insert_cartridge(cartridge);
-        emu.run();
+            return EXIT_FAILURE;
+        }
+
+        window win;
+        win.mainloop();
+
+        SDL_Quit();
 
     } catch (const std::runtime_error& err)
     {
+        SDL_Quit();
+
         std::cerr << "[ERROR]: " << err.what() << '\n';
         return EXIT_FAILURE;
     }

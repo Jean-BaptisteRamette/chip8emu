@@ -12,7 +12,7 @@ namespace emulator
     /* Simple device_bus used to communicate between devices */
     struct device_bus final
     {
-        device_bus() noexcept;
+        explicit device_bus(const std::shared_ptr<SDL_Renderer>& render_ptr) noexcept;
         ~device_bus() noexcept = default;
         device_bus(const device_bus &) = delete;
         device_bus(device_bus &&) = delete;
@@ -20,8 +20,8 @@ namespace emulator
         device_bus &operator=(device_bus &&) = delete;
 
         processor cpu;
-        memory ram;
         screen_display screen;
+        memory ram;
         keyboard keypad;
     };
 }
