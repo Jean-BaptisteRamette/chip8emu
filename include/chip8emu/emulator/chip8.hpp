@@ -5,7 +5,7 @@
 #include <chip8emu/emulator/cartridge.hpp>
 
 
-namespace emulator
+namespace emu
 {
     class chip8
     {

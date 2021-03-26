@@ -2,6 +2,7 @@
 #define CHIP8_EMU_WINDOW_HPP
 
 #include <memory>
+#include <chip8emu/debugger/interface.hpp>
 #include <chip8emu/emulator/chip8.hpp>
 #include <SDL2/SDL.h>
 
@@ -13,7 +14,7 @@
  * This window class is just a wrapper around SDL_Window on which we display
  * the main UI and the screen_display's video buffer.
  */
-class window
+class window final
 {
     /* custom deleter for unique_ptr */
     struct SDLWindowDestroyer
@@ -44,8 +45,8 @@ private:
     std::unique_ptr<SDL_Window, SDLWindowDestroyer> m_handle;
     std::shared_ptr<SDL_Renderer> m_renderer;
 
-    emulator::chip8 chip8emu;
-    // other window components such as the debugger
+    emu::chip8 chip8emu;
+    dbg::interface debugger;
 };
 
 #endif //CHIP8_EMU_WINDOW_HPP

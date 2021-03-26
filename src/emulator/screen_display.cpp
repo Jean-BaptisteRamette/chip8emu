@@ -1,7 +1,7 @@
 #include <chip8emu/emulator/screen_display.hpp>
 
 
-namespace emulator
+namespace emu
 {
     screen_display::screen_display(const std::shared_ptr<SDL_Renderer>& renderer) :
         m_renderer(renderer),

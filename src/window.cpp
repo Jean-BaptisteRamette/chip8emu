@@ -4,8 +4,8 @@
 
 window::window() :
     m_handle( SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOW_SHOWN,
-                               emulator::screen_display::SCALED_WIDTH + 300,
-                               emulator::screen_display::SCALED_HEIGHT + 100,
+                               emu::screen_display::SCALED_WIDTH + 300,
+                               emu::screen_display::SCALED_HEIGHT + 100,
                                SDL_WINDOW_SHOWN), SDLWindowDestroyer() ),
 
     m_renderer( SDL_CreateRenderer(m_handle.get(), -1, SDL_RENDERER_ACCELERATED), SDLRendererDestroyer() ),
@@ -15,7 +15,7 @@ window::window() :
         throw std::runtime_error("[ERROR]: Could not initialize SDL window and renderer");
 
     /* TODO: when working with ImGui, load file with GUI text input */
-    const emulator::cartridge cart("../roms/BRIX");
+    const emu::cartridge cart("../roms/BRIX");
     chip8emu.insert_cartridge(cart);
 }
 

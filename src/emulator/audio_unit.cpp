@@ -4,7 +4,7 @@
 #include <stdexcept>
 
 
-namespace emulator
+namespace emu
 {
 
     /* TODO: Use SDL_AudioDevice */

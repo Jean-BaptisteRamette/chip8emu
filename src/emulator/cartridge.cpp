@@ -3,7 +3,7 @@
 #include <fstream>
 
 
-namespace emulator
+namespace emu
 {
     cartridge::cartridge(std::filesystem::path rom_path)
         : name(std::move(rom_path))

@@ -7,7 +7,7 @@
 #include <vector>
 
 
-namespace emulator
+namespace emu
 {
     class screen_display final
     {
@@ -47,7 +47,7 @@ namespace emulator
         std::shared_ptr<SDL_Renderer> m_renderer;
         std::unique_ptr<SDL_Texture, SDLTextureDestroyer> m_texture;
 
-        /* Area where the emulator renders in the window */
+        /* Area where the emu renders in the window */
         SDL_Rect m_render_target { 0, 0, SCALED_WIDTH, SCALED_HEIGHT };
 
         std::vector<u32> m_video_buffer;

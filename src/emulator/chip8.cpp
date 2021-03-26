@@ -2,7 +2,7 @@
 #include <SDL2/SDL.h>
 
 
-namespace emulator
+namespace emu
 {
 chip8::chip8(const std::shared_ptr<SDL_Renderer>& renderer_ptr) :
     dev_bus(renderer_ptr)

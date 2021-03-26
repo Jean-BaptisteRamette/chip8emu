@@ -1,7 +1,7 @@
 #include <chip8emu/emulator/memory.hpp>
 
 
-namespace emulator
+namespace emu
 {
     memory::memory() : m_ram{}
     {

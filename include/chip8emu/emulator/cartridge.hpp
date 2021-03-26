@@ -6,7 +6,7 @@
 #include <vector>
 
 
-namespace emulator
+namespace emu
 {
     struct cartridge final
     {

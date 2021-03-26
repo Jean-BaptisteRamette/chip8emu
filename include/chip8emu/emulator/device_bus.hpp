@@ -8,7 +8,7 @@
 #include <chip8emu/emulator/audio_unit.hpp>
 
 
-namespace emulator
+namespace emu
 {
     /* Simple device_bus used to communicate between devices */
     struct device_bus final

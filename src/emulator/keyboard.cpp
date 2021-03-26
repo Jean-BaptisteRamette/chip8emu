@@ -1,7 +1,7 @@
 #include <chip8emu/emulator/keyboard.hpp>
 
 
-namespace emulator
+namespace emu
 {
     void keyboard::update_state(SDL_Keycode keycode, bool pressed) noexcept
     {

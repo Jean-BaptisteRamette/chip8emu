@@ -5,7 +5,7 @@
 #include <queue>
 
 
-namespace emulator
+namespace emu
 {
     class audio_unit final
     {

@@ -6,7 +6,7 @@
 #include <chip8emu/inttypes.hpp>
 
 
-namespace emulator
+namespace emu
 {
     using address_type = u16;
 

@@ -8,7 +8,7 @@
 #include <array>
 
 
-namespace emulator
+namespace emu
 {
     class opcode_decoding_error : public std::runtime_error
     {

@@ -14,13 +14,18 @@ set(EMULATOR_SOURCES
         ${INC_DIR}/chip8emu/emulator/*.hpp
         ${SRC_DIR}/emulator/*.cpp)
 
+set(DEBUGGER_SOURCES
+        ${INC_DIR}/chip8emu/debugger/*.hpp
+        ${SRC_DIR}/debugger/*.cpp)
+
 set(MAIN_SOURCES
         ${INC_DIR}/chip8emu/*.hpp
         ${SRC_DIR}/*.cpp)
 
 file(GLOB SRC_FILES
         ${EMULATOR_SOURCES}
-        ${MAIN_SOURCES})
+        ${MAIN_SOURCES}
+        ${DEBUGGER_SOURCES})
 
 file(GLOB IMGUI_SRC lib/imgui/*.h lib/imgui*.cpp)
 

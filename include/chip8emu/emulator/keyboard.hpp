@@ -7,7 +7,7 @@
 #include <array>
 
 
-namespace emulator
+namespace emu
 {
     class keyboard final
     {
