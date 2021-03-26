@@ -22,7 +22,9 @@ file(GLOB SRC_FILES
         ${EMULATOR_SOURCES}
         ${MAIN_SOURCES})
 
-add_executable(chip8_emu ${SRC_FILES})
+file(GLOB IMGUI_SRC lib/imgui/*.h lib/imgui*.cpp)
+
+add_executable(chip8_emu ${SRC_FILES} ${IMGUI_SRC})
 set_project_warnings(chip8_emu)
 target_include_directories(chip8_emu PRIVATE ${INC_DIR})
 target_link_libraries(chip8_emu ${SDL2_LIBRARIES})
