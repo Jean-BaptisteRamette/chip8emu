@@ -5,6 +5,7 @@
 #include <chip8emu/emulator/processor.hpp>
 #include <chip8emu/emulator/keyboard.hpp>
 #include <chip8emu/emulator/memory.hpp>
+#include <chip8emu/emulator/audio_unit.hpp>
 
 
 namespace emulator
@@ -23,6 +24,7 @@ namespace emulator
         screen_display screen;
         memory ram;
         keyboard keypad;
+        audio_unit apu;
     };
 }
 

@@ -8,4 +8,6 @@ using u16 = uint16_t;
 using u32 = uint32_t;
 using u64 = uint64_t;
 
+using s16 = int16_t;
+
 #endif //CHIP8_EMU_INTTYPES_HPP

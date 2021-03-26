@@ -39,9 +39,10 @@ void window::mainloop()
 
         chip8emu.execute_cpu_cycle();
 
-        SDL_Delay(2);
-
+        /* TODO: only render when draw flag is set (when DXYN opcode has been executed) */
         render();
+
+        SDL_Delay(2);
     }
 }
 

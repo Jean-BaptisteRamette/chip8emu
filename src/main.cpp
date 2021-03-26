@@ -8,12 +8,11 @@ int main()
      * The ROM file input is done graphically
      */
 
-
     try
     {
-        if (SDL_InitSubSystem(SDL_INIT_VIDEO) == -1)
+        if (SDL_InitSubSystem(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == -1)
         {
-            std::cerr << "[ERROR]: Could not initialize SDL video subsystem\n";
+            std::cerr << "[ERROR]: Could not initialize SDL subsystems [VIDEO|AUDIO]\n";
             std::cerr << SDL_GetError() << std::endl;
 
             return EXIT_FAILURE;

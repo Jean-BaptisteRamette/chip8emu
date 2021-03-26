@@ -22,12 +22,8 @@ void chip8::handle_physical_event(SDL_Event *event)
 {
     switch (event->type)
     {
-        case SDL_KEYDOWN:
-            dev_bus.keypad.update_state(event->key.keysym.sym, true);
-            break;
-        case SDL_KEYUP:
-            dev_bus.keypad.update_state(event->key.keysym.sym, false);
-            break;
+        case SDL_KEYDOWN: dev_bus.keypad.update_state(event->key.keysym.sym, true);  break;
+        case SDL_KEYUP:   dev_bus.keypad.update_state(event->key.keysym.sym, false); break;
     }
 }
 
@@ -39,6 +35,13 @@ void chip8::execute_cpu_cycle()
 
     if (dev_bus.cpu.timer() > 0)
         dev_bus.cpu.tick();
-}
 
+    if (dev_bus.apu.timer() > 0)
+    {
+        dev_bus.apu.tick();
+
+        if (!dev_bus.apu.muted())
+            dev_bus.apu.beep(700, 50); // TODO: Make this user modifiable
+    }
+}
 }

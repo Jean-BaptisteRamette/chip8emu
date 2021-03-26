@@ -370,6 +370,7 @@ void processor::instrFX15() noexcept
 void processor::instrFX18() noexcept
 {
     /* Set sound timer to VX */
+    m_bus.apu.set_timer(V[OPCODE_GETX(opcode)]);
 }
 
 void processor::instrFX1E() noexcept
