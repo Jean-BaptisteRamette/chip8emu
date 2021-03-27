@@ -1,5 +1,6 @@
 #include <chip8emu/emulator/screen_display.hpp>
 #include <chip8emu/window.hpp>
+#include <iostream>
 
 #include <glad/glad.h>
 
@@ -55,6 +56,7 @@ void window::init_rendering_context()
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+
     ImGui_ImplSDL2_InitForOpenGL(m_handle.get(), m_gl_context);
     ImGui_ImplOpenGL3_Init(GLSL_VERSION);
 }
@@ -74,10 +76,7 @@ void window::mainloop()
         ImGui_ImplSDL2_NewFrame(m_handle.get());
         ImGui::NewFrame();
 
-        ImGui::Begin("Test Window");
-        ImGui::Button("Hey");
-        ImGui::End();
-
+        m_debugger_ui.update();
         /* TODO: only render when draw flag is set (when DXYN opcode has been executed) */
         render();
     }
@@ -106,7 +105,6 @@ void window::render()
     ImGui::Render();
     SDL_RenderPresent(m_renderer.get());
 
-    glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
