@@ -29,24 +29,28 @@ class window final
 
 public:
     window();
-    ~window() noexcept = default;
+    ~window() noexcept;
     window(const window &) = delete;
     window(window &&) = delete;
     window &operator=(const window &) = delete;
     window &operator=(window &&) = delete;
 
-public:
     void mainloop();
-    void render();
 
     [[maybe_unused]] void set_title(const char* title) const noexcept;
 
 private:
+    void init_rendering_context();
+    void handle_events(SDL_Event* event, bool& keep_looping);
+    void render();
+
+private:
     std::unique_ptr<SDL_Window, SDLWindowDestroyer> m_handle;
     std::shared_ptr<SDL_Renderer> m_renderer;
+    SDL_GLContext m_gl_context;
 
-    emu::chip8 chip8emu;
-    dbg::interface debugger;
+    emu::chip8 m_chip8emu;
+    dbg::interface m_debugger_ui;
 };
 
 #endif //CHIP8_EMU_WINDOW_HPP

@@ -6,7 +6,9 @@ namespace emu
 {
 chip8::chip8(const std::shared_ptr<SDL_Renderer>& renderer_ptr) :
     dev_bus(renderer_ptr)
-{}
+{
+    dev_bus.apu.mute(true);
+}
 
 void chip8::insert_cartridge(const cartridge& cartridge)
 {
@@ -41,7 +43,7 @@ void chip8::execute_cpu_cycle()
         dev_bus.apu.tick();
 
         if (!dev_bus.apu.muted())
-            dev_bus.apu.beep(700, 50); // TODO: Make this user modifiable
+            dev_bus.apu.beep(700, 40); // TODO: Make this user modifiable
     }
 }
 }

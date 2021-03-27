@@ -4,9 +4,17 @@
 
 namespace dbg
 {
-    class debugger
+    class debugger final
     {
+    public:
+        debugger() noexcept = default;
+        ~debugger() noexcept = default;
+        debugger(const debugger&) = delete;
+        debugger(debugger&&) = delete;
+        debugger& operator=(const debugger&) = delete;
+        debugger& operator=(debugger&&) = delete;
 
+    private:
     };
 }
 

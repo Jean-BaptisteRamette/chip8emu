@@ -20,13 +20,8 @@ int main()
 
         window win;
         win.mainloop();
-
-        SDL_Quit();
-
     } catch (const std::runtime_error& err)
     {
-        SDL_Quit();
-
         std::cerr << "[ERROR]: " << err.what() << '\n';
         return EXIT_FAILURE;
     }
