@@ -18,7 +18,7 @@
 //        crashproof on bad data
 //        hinting? (no longer patented)
 //        cleartype-style AA?
-//        optimize: use simple memory allocator for intermediates
+//        optimize: use simple m_memory allocator for intermediates
 //        optimize: build edge-list directly from curves
 //        optimize: rasterize directly from curves?
 //
@@ -64,7 +64,7 @@
 //   1.13 (2017-01-02) support OpenType fonts, certain Apple fonts
 //   1.12 (2016-10-25) suppress warnings about casting away const with -Wcast-qual
 //   1.11 (2016-04-02) fix unused-variable warning
-//   1.10 (2016-04-02) user-defined fabs(); rare memory leak; remove duplicate typedef
+//   1.10 (2016-04-02) user-defined fabs(); rare m_memory leak; remove duplicate typedef
 //   1.09 (2016-01-16) warning fix; avoid crash on outofmem; use allocation userdata properly
 //   1.08 (2015-09-13) document stbtt_Rasterize(); fixes for vertical & horizontal edges
 //   1.07 (2015-08-01) allow PackFontRanges to accept arrays of sparse codepoints;
@@ -102,7 +102,7 @@
 //           stbtt_PackEnd()
 //           stbtt_GetPackedQuad()
 //
-//   "Load" a font file from a memory buffer (you have to keep the buffer loaded)
+//   "Load" a font file from a m_memory buffer (you have to keep the buffer loaded)
 //           stbtt_InitFont()
 //           stbtt_GetFontOffsetForIndex()        -- indexing for TTC font collections
 //           stbtt_GetNumberOfFonts()             -- number of fonts for TTC font collections
@@ -232,7 +232,7 @@
 //      if you don't do this, stb_truetype is forced to do the conversion on
 //      every call.
 //
-//    - There are a lot of memory allocations. We should modify it to take
+//    - There are a lot of m_memory allocations. We should modify it to take
 //      a temp buffer and allocate from the temp buffer (without freeing),
 //      should help performance a lot.
 //
@@ -378,7 +378,7 @@ int main(int arg, char **argv)
    stbtt_fontinfo font;
    int i,j,ascent,baseline,ch=0;
    float scale, xpos=2; // leave a little padding in case the character extends left
-   char *text = "Heljo World!"; // intentionally misspelled to show 'lj' brokenness
+   char *text = "Heljo World!"; // intentionally misspelled to update 'lj' brokenness
 
    fread(buffer, 1, 1000000, fopen("c:/windows/fonts/arialbd.ttf", "rb"));
    stbtt_InitFont(&font, buffer, 0);
@@ -598,7 +598,7 @@ STBTT_DEF int  stbtt_PackBegin(stbtt_pack_context *spc, unsigned char *pixels, i
 // Returns 0 on failure, 1 on success.
 
 STBTT_DEF void stbtt_PackEnd  (stbtt_pack_context *spc);
-// Cleans up the packing context and frees all memory.
+// Cleans up the packing context and frees all m_memory.
 
 #define STBTT_POINT_SIZE(x)   (-(x))
 
@@ -4815,7 +4815,7 @@ STBTT_DEF int stbtt_CompareUTF8toUTF16_bigendian(const char *s1, int len1, const
 //   1.12 (2016-10-25) suppress warnings about casting away const with -Wcast-qual
 //   1.11 (2016-04-02) fix unused-variable warning
 //   1.10 (2016-04-02) allow user-defined fabs() replacement
-//                     fix memory leak if fontsize=0.0
+//                     fix m_memory leak if fontsize=0.0
 //                     fix warning from duplicate typedef
 //   1.09 (2016-01-16) warning fix; avoid crash on outofmem; use alloc userdata for PackFontRanges
 //   1.08 (2015-09-13) document stbtt_Rasterize(); fixes for vertical & horizontal edges
@@ -4829,7 +4829,7 @@ STBTT_DEF int stbtt_CompareUTF8toUTF16_bigendian(const char *s1, int len1, const
 //                     remove need for STBTT_sort
 //   1.05 (2015-04-15) fix misplaced definitions for STBTT_STATIC
 //   1.04 (2015-04-15) typo in example
-//   1.03 (2015-04-12) STBTT_STATIC, fix memory leak in new packing, various fixes
+//   1.03 (2015-04-12) STBTT_STATIC, fix m_memory leak in new packing, various fixes
 //   1.02 (2014-12-10) fix various warnings & compile issues w/ stb_rect_pack, C++
 //   1.01 (2014-12-08) fix subpixel position when oversampling to exactly match
 //                        non-oversampled; STBTT_POINT_SIZE for packed case only

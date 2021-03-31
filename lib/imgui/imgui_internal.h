@@ -362,7 +362,7 @@ enum ImGuiSelectableFlagsPrivate_
     ImGuiSelectableFlags_PressedOnRelease   = 1 << 22,
     ImGuiSelectableFlags_DrawFillAvailWidth = 1 << 23,  // FIXME: We may be able to remove this (added in 6251d379 for menus)
     ImGuiSelectableFlags_AllowItemOverlap   = 1 << 24,
-    ImGuiSelectableFlags_DrawHoveredWhenHeld= 1 << 25,  // Always show active when held, even is not hovered. This concept could probably be renamed/formalized somehow.
+    ImGuiSelectableFlags_DrawHoveredWhenHeld= 1 << 25,  // Always update active when held, even is not hovered. This concept could probably be renamed/formalized somehow.
     ImGuiSelectableFlags_SetNavIdOnHover    = 1 << 26
 };
 
@@ -1021,8 +1021,8 @@ struct ImGuiContext
 
     // Settings
     bool                           SettingsLoaded;
-    float                          SettingsDirtyTimer;          // Save .ini Settings to memory when time reaches zero
-    ImGuiTextBuffer                SettingsIniData;             // In memory .ini settings
+    float                          SettingsDirtyTimer;          // Save .ini Settings to m_memory when time reaches zero
+    ImGuiTextBuffer                SettingsIniData;             // In m_memory .ini settings
     ImVector<ImGuiSettingsHandler> SettingsHandlers;            // List of .ini settings handlers
     ImVector<ImGuiWindowSettings>  SettingsWindows;             // ImGuiWindow .ini settings entries (parsed from the last loaded .ini file and maintained on saving)
 
@@ -1216,7 +1216,7 @@ struct IMGUI_API ImGuiWindowTempData
     int                     FocusCounterAll;        // Counter for focus/tabbing system. Start at -1 and increase as assigned via FocusableItemRegister() (FIXME-NAV: Needs redesign)
     int                     FocusCounterTab;        // (same, but only count widgets which you can Tab through)
 
-    // We store the current settings outside of the vectors to increase memory locality (reduce cache misses). The vectors are rarely modified. Also it allows us to not heap allocate for short-lived windows which are not using those settings.
+    // We store the current settings outside of the vectors to increase m_memory locality (reduce cache misses). The vectors are rarely modified. Also it allows us to not heap allocate for short-lived windows which are not using those settings.
     ImGuiItemFlags          ItemFlags;              // == ItemFlagsStack.back() [empty == ImGuiItemFlags_Default]
     float                   ItemWidth;              // == ItemWidthStack.back(). 0.0: default, >0.0: width in pixels, <0.0: align xx pixels to the right of window
     float                   TextWrapPos;            // == TextWrapPosStack.back() [empty == -1.0f]

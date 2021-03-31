@@ -17,13 +17,13 @@ namespace emu
         std::fill(std::begin(m_video_buffer), std::end(m_video_buffer), 0);
     }
 
-    void screen_display::render_frame() const noexcept
+    void screen_display::render_frame() noexcept
     {
         SDL_UpdateTexture(m_texture.get(), nullptr, std::data(m_video_buffer), PITCH);
         SDL_RenderCopy(m_renderer.get(), m_texture.get(), nullptr, &m_render_target);
     }
 
-    u32 &screen_display::pixel(u64 pos) noexcept
+    [[nodiscard]] u32 &screen_display::pixel(u64 pos) noexcept
     {
         return m_video_buffer[pos];
     }

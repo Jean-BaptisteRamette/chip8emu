@@ -8,6 +8,8 @@
 #include <array>
 
 
+class debugger;
+
 namespace emu
 {
     class opcode_decoding_error : public std::runtime_error
@@ -28,7 +30,14 @@ namespace emu
 
     class processor final
     {
+        /* The debugger must access the registers */
+        friend debugger;
+
     public:
+        /* PC, I, SP, Timer */
+        static constexpr u8 SPECIAL_REG_COUNT { 4 };
+
+        /* V0 - VF */
         static constexpr u8 REG_COUNT  { 16 };
         static constexpr u8 STACK_SIZE { 16 };
 
@@ -51,7 +60,6 @@ namespace emu
 
         [[nodiscard]] u8 timer() const noexcept;
 
-
         /* CHIP-8 has 34 instructions, they are described here https://en.wikipedia.org/wiki/CHIP-8#Opcode_table ! */
         void invalid_opcode() const;
         void instr00E0()    const; void instr8XY0() noexcept;
@@ -72,9 +80,8 @@ namespace emu
         void instrEXA1() noexcept; void instrFX33() noexcept;
         void instrFX55() noexcept; void instrFX65() noexcept;
 
-
-
     private:
+
         /* link to other devices such as the RAM */
         device_bus& m_bus;
 
@@ -83,7 +90,7 @@ namespace emu
         std::uniform_int_distribution<u8> distribution;
 
         /*!
-         * @brief 8-bit general purpose registers
+         * 8-bit general purpose registers
          * Register are called VX, X being a hex digit (0-F)
          * VF is the carry flag register
          */
@@ -92,7 +99,7 @@ namespace emu
 
         /* special registers */
         u16 PC;      /* address of the current instruction */
-        u16 I  {};   /* special register, stores memory addresses */
+        u16 I  {};   /* special register, stores m_memory addresses */
         u8  SP {};   /* points to the top of the stack */
 
         u16 opcode {};        /* current operation code */

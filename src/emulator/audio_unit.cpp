@@ -10,7 +10,7 @@ namespace emu
     /* TODO: Use SDL_AudioDevice */
 static void audio_callback(void* userdata, u8* stream, int len)
 {
-    s16* stream16 { (s16*)stream };
+    i16* stream16 {(i16*)stream };
     auto apu { static_cast<audio_unit*>(userdata) };
     apu->build_samples(stream16, len / 2);
 }
@@ -46,7 +46,7 @@ audio_unit::~audio_unit() noexcept
     SDL_CloseAudio();
 }
 
-void audio_unit::build_samples(s16* stream, int len)
+void audio_unit::build_samples(i16* stream, int len)
 {
     /* Modified the implementation found here found here: https://web.archive.org/web/20120313055436/http://www.dgames.org/beep-sound-with-sdl/ */
 

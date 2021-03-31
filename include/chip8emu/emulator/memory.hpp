@@ -28,10 +28,10 @@ namespace emu
     class memory final
     {
         /*!
-         * Chip8 memory has a range of 4095 bytes.
+         * Chip8 m_memory has a range of 4095 bytes.
          * The machine code must be loaded at address 512.
-         * The memory also contains a font at address 80.
-         * The font represents hex digits from 0-F, each digit is 5 bytes long in memory
+         * The m_memory also contains a font at address 80.
+         * The font represents hex digits from 0-F, each digit is 5 bytes long in m_memory
          */
 
     public:

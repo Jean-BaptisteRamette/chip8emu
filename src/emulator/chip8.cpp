@@ -33,6 +33,7 @@ void chip8::execute_cpu_cycle()
 {
     dev_bus.cpu.fetch_instruction();
     dev_bus.cpu.exec_instruction();
+
     dev_bus.screen.render_frame();
 
     if (dev_bus.cpu.timer() > 0)

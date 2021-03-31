@@ -30,7 +30,6 @@ namespace emu
     /* read and write operations */
     u8 &memory::operator[](address_type address)
     {
-        // TODO: should the user be able to access memory outside program area, for example to get fontset ?
         if (address >= SIZE)
             throw memory_access_error(address);
 

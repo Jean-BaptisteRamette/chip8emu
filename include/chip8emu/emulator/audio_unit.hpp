@@ -39,7 +39,7 @@ namespace emu
 
         /* Make a device_opened function as we may want to keep running even if the sound wasn't initialized */
 
-        void build_samples(s16* stream, int len);
+        void build_samples(i16* stream, int len);
 
     private:
         std::queue<beep_sound> m_audio_queue;

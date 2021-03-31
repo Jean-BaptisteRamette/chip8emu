@@ -12,21 +12,25 @@
 static constexpr auto GLSL_VERSION { "#version 150" };
 
 window::window() :
-        m_handle( SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOW_SHOWN,
+        m_handle( SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                emu::screen_display::SCALED_WIDTH + 400,
                                emu::screen_display::SCALED_HEIGHT + 400,
-                               SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL), SDLWindowDestroyer() ),
+                               SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL), SDLWindowDestroyer() ),
 
         m_renderer( SDL_CreateRenderer(m_handle.get(), -1, SDL_RENDERER_ACCELERATED), SDLRendererDestroyer() ),
         m_chip8emu(m_renderer)
 {
     if (!m_handle || !m_renderer)
-        throw std::runtime_error("[ERROR]: Could not initialize SDL window and renderer");
+        throw std::runtime_error("Could not initialize SDL window and renderer");
 
     init_rendering_context();
 
-    const emu::cartridge cart("../roms/BRIX");
-    m_chip8emu.insert_cartridge(cart);
+    /* Try to load a game */
+    const emu::cartridge game_cart("../roms/BRIX");
+    m_chip8emu.insert_cartridge(game_cart);
+
+    /* Start the debugger with the loaded program */
+    m_debugger_ui.attach_emulator_process(m_chip8emu);
 }
 
 window::~window() noexcept
@@ -36,7 +40,6 @@ window::~window() noexcept
     ImGui::DestroyContext();
 
     SDL_GL_DeleteContext(m_gl_context);
-
     SDL_Quit();
 }
 
@@ -76,8 +79,9 @@ void window::mainloop()
         ImGui_ImplSDL2_NewFrame(m_handle.get());
         ImGui::NewFrame();
 
+        m_console.update();
         m_debugger_ui.update();
-        /* TODO: only render when draw flag is set (when DXYN opcode has been executed) */
+
         render();
     }
 }
@@ -103,8 +107,8 @@ void window::render()
 {
     /* Render ImGui windows and the emulator display */
     ImGui::Render();
-    SDL_RenderPresent(m_renderer.get());
 
+    SDL_RenderPresent(m_renderer.get());
     glClear(GL_COLOR_BUFFER_BIT);
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

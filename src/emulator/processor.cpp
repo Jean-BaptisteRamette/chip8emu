@@ -109,7 +109,7 @@ void processor::invalid_opcode() const
 
 void processor::instr00E0() const
 {
-    /* clear screen memory */
+    /* clear screen m_memory */
     m_bus.screen.clear();
 }
 
@@ -402,7 +402,7 @@ void processor::instrFX33() noexcept
 
 void processor::instrFX55() noexcept
 {
-    /* Dump registers values in memory from address I */
+    /* Dump registers values in m_memory from address I */
     const auto X { OPCODE_GETX(opcode) };
 
     for (u8 reg{0}; reg <= X; ++reg)
@@ -411,7 +411,7 @@ void processor::instrFX55() noexcept
 
 void processor::instrFX65() noexcept
 {
-    /* Fills register from V0 to VX with values from memory starting at address I */
+    /* Fills register from V0 to VX with values from m_memory starting at address I */
     const auto X { OPCODE_GETX(opcode) };
 
     for (u8 reg {}; reg <= X; ++reg)

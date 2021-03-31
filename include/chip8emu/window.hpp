@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <chip8emu/debugger/interface.hpp>
+#include <chip8emu/console/console.hpp>
 #include <chip8emu/emulator/chip8.hpp>
 #include <SDL2/SDL.h>
 
@@ -50,7 +51,9 @@ private:
     SDL_GLContext m_gl_context;
 
     emu::chip8 m_chip8emu;
+    csl::console m_console;
     dbg::interface m_debugger_ui;
+
 };
 
 #endif //CHIP8_EMU_WINDOW_HPP

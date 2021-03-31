@@ -36,10 +36,10 @@ namespace emu
         void clear();
 
         /* copy video buffer to texture and display texture */
-        void render_frame() const noexcept;
+        void render_frame() noexcept;
 
         /* get mutable pixel from video buffer */
-        u32& pixel(u64 pos) noexcept;
+        [[nodiscard]] u32& pixel(u64 pos) noexcept;
 
         /* allow user to resize render target */
 
@@ -49,7 +49,6 @@ namespace emu
 
         /* Area where the emu renders in the window */
         SDL_Rect m_render_target { 0, 0, SCALED_WIDTH, SCALED_HEIGHT };
-
         std::vector<u32> m_video_buffer;
     };
 }

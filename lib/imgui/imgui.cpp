@@ -100,7 +100,7 @@ CODE
  - Minimize setup and maintenance.
  - Minimize state storage on user side.
  - Portable, minimize dependencies, run on target (consoles, phones, etc.).
- - Efficient runtime and memory consumption (NB- we do allocate when "growing" content e.g. creating a window,.
+ - Efficient runtime and m_memory consumption (NB- we do allocate when "growing" content e.g. creating a window,.
    opening a tree node for the first time, etc. but a typical frame should not allocate anything).
 
  Designed for developers and content-creators, not the typical end-user! Some of the weaknesses includes:
@@ -1450,7 +1450,7 @@ void ImStrTrimBlanks(char* buf)
         p++;
     while (p > p_start && (p[-1] == ' ' || p[-1] == '\t'))  // Trailing blanks
         p--;
-    if (p_start != buf)                     // Copy memory if we had leading blanks
+    if (p_start != buf)                     // Copy m_memory if we had leading blanks
         memmove(buf, p_start, p - p_start);
     buf[p - p_start] = 0;                   // Zero terminate
 }
@@ -1506,7 +1506,7 @@ int ImFormatStringV(char* buf, size_t buf_size, const char* fmt, va_list args)
 
 // CRC32 needs a 1KB lookup table (not cache friendly)
 // Although the code to generate the table is simple and shorter than the table itself, using a const table allows us to easily:
-// - avoid an unnecessary branch/memory tap, - keep the ImHashXXX functions usable by static constructors, - make it thread-safe.
+// - avoid an unnecessary branch/m_memory tap, - keep the ImHashXXX functions usable by static constructors, - make it thread-safe.
 static const ImU32 GCrc32LookupTable[256] =
 {
     0x00000000,0x77073096,0xEE0E612C,0x990951BA,0x076DC419,0x706AF48F,0xE963A535,0x9E6495A3,0x0EDB8832,0x79DCB8A4,0xE0D5E91E,0x97D2D988,0x09B64C2B,0x7EB17CBD,0xE7B82D07,0x90BF1D91,
@@ -1590,7 +1590,7 @@ FILE* ImFileOpen(const char* filename, const char* mode)
 #endif
 }
 
-// Load file content into memory
+// Load file content into m_memory
 // Memory allocated with IM_ALLOC(), must be freed by user using IM_FREE() == ImGui::MemFree()
 void* ImFileLoadToMemory(const char* filename, const char* file_open_mode, size_t* out_file_size, int padding_bytes)
 {
@@ -3611,7 +3611,7 @@ void ImGui::UpdateHoveredWindowAndCaptureFlags()
     if (g.IO.NavActive && (g.IO.ConfigFlags & ImGuiConfigFlags_NavEnableKeyboard) && !(g.IO.ConfigFlags & ImGuiConfigFlags_NavNoCaptureKeyboard))
         g.IO.WantCaptureKeyboard = true;
 
-    // Update io.WantTextInput flag, this is to allow systems without a keyboard (e.g. mobile, hand-held) to show a software keyboard if possible
+    // Update io.WantTextInput flag, this is to allow systems without a keyboard (e.g. mobile, hand-held) to update a software keyboard if possible
     g.IO.WantTextInput = (g.WantTextInputNextFrame != -1) ? (g.WantTextInputNextFrame != 0) : false;
 }
 

@@ -14,7 +14,7 @@ namespace emu
         if (!rom)
             throw std::runtime_error("Could not open rom: " + name.string());
 
-        /* make sure ROM fits in memory's program range */
+        /* make sure ROM fits in m_memory's program range */
         const auto rom_size { std::filesystem::file_size(name) };
 
         if (rom_size > memory::CODE_MAXSIZE)

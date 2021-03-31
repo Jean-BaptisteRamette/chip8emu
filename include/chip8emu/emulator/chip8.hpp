@@ -27,7 +27,6 @@ namespace emu
         /* execute a simple fetch, decode, execute cycle, and does all the rendering work */
         void execute_cpu_cycle();
 
-    private:
         /* communicate with devices */
         device_bus dev_bus;
     };
