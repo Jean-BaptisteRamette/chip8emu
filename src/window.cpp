@@ -30,7 +30,7 @@ window::window() :
     m_chip8emu.insert_cartridge(game_cart);
 
     /* Start the debugger with the loaded program */
-    m_debugger_ui.attach_emulator_process(m_chip8emu);
+    // m_debugger_ui.attach_emulator_process(m_chip8emu);
 }
 
 window::~window() noexcept
@@ -80,7 +80,9 @@ void window::mainloop()
         ImGui::NewFrame();
 
         m_console.update();
-        m_debugger_ui.update();
+
+        if (m_debugger_ui.has_process())
+            m_debugger_ui.update();
 
         render();
     }
@@ -107,14 +109,12 @@ void window::render()
 {
     /* Render ImGui windows and the emulator display */
     ImGui::Render();
-
     SDL_RenderPresent(m_renderer.get());
     glClear(GL_COLOR_BUFFER_BIT);
-
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-[[maybe_unused]] void window::set_title(const char *title) const noexcept
+void window::set_title(const char *title) const noexcept
 {
     SDL_SetWindowTitle(m_handle.get(), title);
 }

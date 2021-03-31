@@ -38,7 +38,7 @@ public:
 
     void mainloop();
 
-    [[maybe_unused]] void set_title(const char* title) const noexcept;
+    void set_title(const char* title) const noexcept;
 
 private:
     void init_rendering_context();

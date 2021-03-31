@@ -31,6 +31,16 @@ void processor::tick() noexcept
     return delay_timer;
 }
 
+[[nodiscard]] bool processor::draw_flag_set() const noexcept
+{
+    return draw_flag;
+}
+
+void processor::reset_draw_flag() noexcept
+{
+    draw_flag = false;
+}
+
 void processor::exec_instruction()
 {
     switch ((opcode & 0xF000u) >> 0xCu)
@@ -107,10 +117,11 @@ void processor::invalid_opcode() const
     throw opcode_decoding_error(opcode);
 }
 
-void processor::instr00E0() const
+void processor::instr00E0()
 {
     /* clear screen m_memory */
     m_bus.screen.clear();
+    draw_flag = true;
 }
 
 void processor::instr00EE() noexcept
@@ -304,7 +315,7 @@ void processor::instrDXYN() noexcept
             /* x + y * w formula */
             const u64 pos = (x + col) + screen_display::WIDTH * (y + row);
 
-            /* get video pixel to render_frame */
+            /* get video pixel to update_frame */
             u32& pixel {m_bus.screen.pixel(pos) };
 
             if (sprite_row & (0x80u >> col))
@@ -317,6 +328,8 @@ void processor::instrDXYN() noexcept
             }
         }
     }
+
+    draw_flag = true;
 }
 
 void processor::instrEX9E() noexcept

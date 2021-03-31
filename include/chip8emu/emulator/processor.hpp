@@ -55,14 +55,18 @@ namespace emu
         /* decode opcode then call its corresponding instruction */
         void exec_instruction();
 
-        /* render_frame the delay timer */
+        /* update_frame the delay timer */
         void tick() noexcept;
 
         [[nodiscard]] u8 timer() const noexcept;
+        [[nodiscard]] bool draw_flag_set() const noexcept;
+
+        /* sets draw flag to false */
+        void reset_draw_flag() noexcept;
 
         /* CHIP-8 has 34 instructions, they are described here https://en.wikipedia.org/wiki/CHIP-8#Opcode_table ! */
         void invalid_opcode() const;
-        void instr00E0()    const; void instr8XY0() noexcept;
+        void instr00E0();          void instr8XY0() noexcept;
         void instr00EE() noexcept; void instr8XY1() noexcept;
         void instr1NNN() noexcept; void instr8XY2() noexcept;
         void instr2NNN() noexcept; void instr8XY3() noexcept;
@@ -103,7 +107,8 @@ namespace emu
         u8  SP {};   /* points to the top of the stack */
 
         u16 opcode {};        /* current operation code */
-        u8  delay_timer {};   /* timer to control CPU clock cycle */
+        u8  delay_timer { 255 };   /* timer to control CPU clock cycle */
+        bool draw_flag { true };
     };
 }
 

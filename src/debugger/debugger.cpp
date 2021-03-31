@@ -6,6 +6,11 @@ void debugger::attach_emulator_process(emu::chip8& chip8) noexcept
     m_memory = &chip8.dev_bus.ram;
 }
 
+bool debugger::has_process() const noexcept
+{
+    return m_processor != nullptr && m_memory != nullptr;
+}
+
 [[nodiscard]] u8 debugger::get_reg_value(u8 reg) const noexcept
 {
     return m_processor->V[reg];

@@ -35,7 +35,10 @@ namespace emu
         /* clear video buffer */
         void clear();
 
-        /* copy video buffer to texture and display texture */
+        /* copy video buffer to texture */
+        void update_frame() noexcept;
+
+        /* render the texture to the SDL renderer */
         void render_frame() noexcept;
 
         /* get mutable pixel from video buffer */

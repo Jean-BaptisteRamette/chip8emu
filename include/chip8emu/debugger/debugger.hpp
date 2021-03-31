@@ -26,6 +26,7 @@ public:
     debugger &operator=(debugger &&) = delete;
 
     void attach_emulator_process(emu::chip8& chip8) noexcept;
+    [[nodiscard]] bool has_process() const noexcept;
 
     [[nodiscard]] u8  get_reg_value(u8 reg) const noexcept;
     [[nodiscard]] u16 get_reg_value(register_type reg) const noexcept;
@@ -47,8 +48,8 @@ public:
     void rerun();
 
 protected:
-    emu::processor *m_processor;
-    emu::memory *m_memory;
+    emu::processor *m_processor { nullptr };
+    emu::memory *m_memory { nullptr };
 
     /* breakpoints are sorted from lowest address to highest address */
     std::set<emu::address_type> m_breakpoints;
