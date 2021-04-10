@@ -6,7 +6,7 @@ namespace emu
     screen_display::screen_display(const std::shared_ptr<SDL_Renderer>& renderer) :
         m_renderer(renderer),
         m_texture {
-                    SDL_CreateTexture(m_renderer.get(), SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT),
+                    SDL_CreateTexture(m_renderer.get(), SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT),
                     SDLTextureDestroyer() }
     {
         m_video_buffer.resize(WIDTH * HEIGHT);
@@ -14,7 +14,7 @@ namespace emu
 
     void screen_display::clear()
     {
-        std::fill(std::begin(m_video_buffer), std::end(m_video_buffer), 0);
+        SDL_memset(std::data(m_video_buffer), 0, WIDTH * HEIGHT);
     }
 
     void screen_display::update_frame() noexcept

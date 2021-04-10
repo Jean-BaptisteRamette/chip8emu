@@ -93,17 +93,17 @@ void audio_unit::beep(double freq, int duration)
 
 void audio_unit::tick() noexcept
 {
-    --m_timer;
+    --ST;
 }
 
 void audio_unit::set_timer(u8 value) noexcept
 {
-    m_timer = value;
+    ST = value;
 }
 
 [[nodiscard]] u8 audio_unit::timer() const noexcept
 {
-    return m_timer;
+    return ST;
 }
 
 void audio_unit::mute(bool value) noexcept

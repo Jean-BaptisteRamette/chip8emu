@@ -9,6 +9,7 @@ namespace emu
 #define OPCODE_GETY(opcode) ((opcode) & 0x00F0u) >> 4u  // OPCODE_GETY(0x8F13) -> 0x1
 #define JMP_NEXT(pc) pc += 2  // jumps to the next instruction
 
+
 processor::processor(device_bus &bus) noexcept
         : m_bus{bus},
         mt(std::random_device()()), distribution(0, 255), // PRNG
@@ -21,24 +22,23 @@ void processor::fetch_instruction() noexcept
     JMP_NEXT(PC);
 }
 
-void processor::tick() noexcept
+void processor::tick() noexcept { --DT; }
+
+[[nodiscard]] u8 processor::timer()           const noexcept { return DT; }
+
+void processor::flip_flag(proc_flags flag) noexcept
 {
-    --delay_timer;
+    flags.flip(flag);
 }
 
-[[nodiscard]] u8 processor::timer() const noexcept
+void processor::set_flag(proc_flags flag, bool value) noexcept
 {
-    return delay_timer;
+    flags.set(flag, value);
 }
 
-[[nodiscard]] bool processor::draw_flag_set() const noexcept
+[[nodiscard]] bool processor::is_flag_set(proc_flags flag) const noexcept
 {
-    return draw_flag;
-}
-
-void processor::reset_draw_flag() noexcept
-{
-    draw_flag = false;
+    return flags[flag];
 }
 
 void processor::exec_instruction()
@@ -119,9 +119,9 @@ void processor::invalid_opcode() const
 
 void processor::instr00E0()
 {
-    /* clear screen m_memory */
+    /* clear screen memory */
     m_bus.screen.clear();
-    draw_flag = true;
+    set_flag(proc_flags::DRAW);
 }
 
 void processor::instr00EE() noexcept
@@ -329,7 +329,7 @@ void processor::instrDXYN() noexcept
         }
     }
 
-    draw_flag = true;
+    set_flag(proc_flags::DRAW);
 }
 
 void processor::instrEX9E() noexcept
@@ -353,7 +353,7 @@ void processor::instrEXA1() noexcept
     void processor::instrFX07() noexcept
 {
     /* Sets VX to the value of the delay timer */
-    V[OPCODE_GETX(opcode)] = delay_timer;
+    V[OPCODE_GETX(opcode)] = DT;
 }
 
 void processor::instrFX0A() noexcept
@@ -361,7 +361,7 @@ void processor::instrFX0A() noexcept
     /* Waits for a key to be pressed and stores it in VX */
     auto& VX { V[OPCODE_GETX(opcode)] };
 
-    for (u8 key_index{0}; key_index < keyboard::KEY_COUNT; ++key_index)
+    for (u8 key_index {}; key_index < keyboard::KEY_COUNT; ++key_index)
     {
         if (m_bus.keypad.key_pressed(key_index))
         {
@@ -377,7 +377,7 @@ void processor::instrFX0A() noexcept
 void processor::instrFX15() noexcept
 {
     /* Set delay timer to VX */
-    delay_timer = V[OPCODE_GETX(opcode)];
+    DT = V[OPCODE_GETX(opcode)];
 }
 
 void processor::instrFX18() noexcept
@@ -418,7 +418,7 @@ void processor::instrFX55() noexcept
     /* Dump registers values in m_memory from address I */
     const auto X { OPCODE_GETX(opcode) };
 
-    for (u8 reg{0}; reg <= X; ++reg)
+    for (u8 reg {}; reg <= X; ++reg)
         m_bus.ram[I + reg] = V[reg];
 }
 

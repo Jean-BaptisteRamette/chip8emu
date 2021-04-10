@@ -6,7 +6,6 @@ include(cmake/CompilerWarnings.cmake)
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(SDL2 REQUIRED)
-
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)

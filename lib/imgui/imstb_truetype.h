@@ -163,7 +163,7 @@
 //         and space the characters. See docs for stbtt_GetFontVMetrics.
 //
 //      Font Size in Pixels or Points
-//         The preferred interface for specifying font sizes in stb_truetype
+//         The preferred dbg_interface for specifying font sizes in stb_truetype
 //         is to specify how tall the font's vertical extent should be in pixels.
 //         If that sounds good enough, skip the next paragraph.
 //
@@ -256,7 +256,7 @@
 //   Software rasterization             240 LOC  \.
 //   Curve tessellation                 120 LOC   \__ 550 LOC Bitmap creation
 //   Bitmap management                  100 LOC   /
-//   Baked bitmap interface              70 LOC  /
+//   Baked bitmap dbg_interface              70 LOC  /
 //   Font name matching & access        150 LOC  ---- 150 
 //   C runtime library abstraction       60 LOC  ----  60
 //

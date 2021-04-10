@@ -22,7 +22,7 @@ namespace emu
         [[maybe_unused]] void remove_cartridge();
 
         /* handle chip8 specific events, such as keypress */
-        void handle_physical_event(SDL_Event* event);
+        void handle_physical_event(SDL_Event& event);
 
         /* execute a simple fetch, decode, execute cycle, and does all the rendering work */
         void execute_cpu_cycle();

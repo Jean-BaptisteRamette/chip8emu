@@ -16,7 +16,10 @@ class debugger
 {
 
 public:
-    enum class register_type { PC, SP, I, Timer };
+    enum class register_type
+    {
+        PC, SP, I, DT
+    };
 
     debugger() noexcept = default;
     virtual ~debugger() noexcept = default;
@@ -25,12 +28,18 @@ public:
     debugger &operator=(const debugger &) = delete;
     debugger &operator=(debugger &&) = delete;
 
-    void attach_emulator_process(emu::chip8& chip8) noexcept;
-    [[nodiscard]] bool has_process() const noexcept;
+    void attach_process_handle(emu::chip8& chip8) noexcept;
+    [[nodiscard]] bool has_process_handle() const noexcept;
 
-    [[nodiscard]] u8  get_reg_value(u8 reg) const noexcept;
-    [[nodiscard]] u16 get_reg_value(register_type reg) const noexcept;
-    [[nodiscard]] u16 get_stack_value(u8 index) const noexcept;
+    void check_breakpoints();
+
+    [[nodiscard]] u8  get_gp_reg_value(u8 reg_index) const noexcept;
+    [[nodiscard]] u16 get_sp_reg_value(register_type reg) const noexcept;
+    [[nodiscard]] u16 get_stack_value(u8 st_index) const noexcept;
+
+    void set_gp_reg_value(u8 reg_index, u8 value) noexcept;
+    void set_sp_reg_value(register_type reg, u16 value) noexcept;
+    void set_stack_value(u8 st_index, u8 value) noexcept;
 
     /* try to insert a breakpoint, if it already exists, return false */
     [[nodiscard]] bool add_breakpoint(emu::address_type address);
@@ -38,16 +47,17 @@ public:
     /* remove a breakpoint, if failed, return false */
     [[nodiscard]] bool remove_breakpoint(emu::address_type address);
 
-    /* Go to next instruction */
-    void step_next();
+    /* pause or unpause the current process */
+    void pause_process() const;
 
-    /* Continue execution until breakpoint */
-    void resume();
+    /* Go to next instruction */
+    void step_next() const;
 
     /* Rerun the program */
     void rerun();
 
 protected:
+    emu::chip8* m_emulator { nullptr };
     emu::processor *m_processor { nullptr };
     emu::memory *m_memory { nullptr };
 

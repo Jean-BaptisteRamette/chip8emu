@@ -18,7 +18,7 @@
  *      fcolor <r, g, b | 0x[0-F]{6}>        (set the foreground color of the chip8 display)
  *      mute                                 (mute the emulated sound)
  *      unmute                               (unmute the emulated sound)
- *      quit                                 (quit the emulator)
+ *      quit                                 (quit the m_emulator)
  *      list                                 (list files and directories)
  *      disassemble <chip8 executable file>  (disassemble a file)
  *      assemble    <chip8 source file>      (assemble a file)
@@ -34,10 +34,16 @@ namespace csl
             DEFAULT_FLAGS
         };
 
+        static constexpr float POS_X { emu::screen_display::SCALED_WIDTH };
+        static constexpr float POS_Y { 0 };
+
     public:
         console() noexcept;
 
         void update() override;
+
+        static constexpr float WIDTH  { 400 };
+        static constexpr float HEIGHT { emu::screen_display::SCALED_HEIGHT };
 
     private:
         std::queue<command> commands;

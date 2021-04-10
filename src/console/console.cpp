@@ -2,7 +2,8 @@
 
 namespace csl
 {
-console::console() noexcept : imgui_window_base("Console", {200, 600})
+
+console::console() noexcept : imgui_window_base("Console", {POS_X, POS_Y}, {WIDTH, HEIGHT})
 {}
 
 void console::update()
@@ -11,4 +12,5 @@ void console::update()
     ImGui::Button("Test Button");
     end();
 }
+
 }

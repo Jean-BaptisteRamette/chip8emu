@@ -31,7 +31,7 @@ namespace emu
         /* decrement the timer */
         void tick() noexcept;
 
-        void mute(bool value) noexcept;
+        void mute(bool value = true) noexcept;
         [[nodiscard]] bool muted() const noexcept;
 
         void set_timer(u8 value) noexcept;
@@ -43,7 +43,7 @@ namespace emu
 
     private:
         std::queue<beep_sound> m_audio_queue;
-        u8 m_timer { 0 };
+        u8 ST {0 };
 
         /*
          * Variable which just change the value given to

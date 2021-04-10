@@ -142,7 +142,7 @@ CODE
    or destruction steps, less superfluous data retention on your side, less state duplication, less state synchronization, less bugs.
  - Call and read ImGui::ShowDemoWindow() for demo code demonstrating most features.
  - The library is designed to be built from sources. Avoid pre-compiled binaries and packaged versions. See imconfig.h to configure your build.
- - Dear ImGui is an implementation of the IMGUI paradigm (immediate-mode graphical user interface, a term coined by Casey Muratori).
+ - Dear ImGui is an implementation of the IMGUI paradigm (immediate-mode graphical user dbg_interface, a term coined by Casey Muratori).
    You can learn about IMGUI principles at http://www.johno.se/book/imgui.html, http://mollyrocket.com/861 & more links docs/README.md.
  - Dear ImGui is a "single pass" rasterizing implementation of the IMGUI paradigm, aimed at ease of use and high-performances.
    For every application frame your UI code will be called only once. This is in contrast to e.g. Unity's own implementation of an IMGUI,
@@ -599,7 +599,7 @@ CODE
  Q: Why the odd dual naming, "Dear ImGui" vs "ImGui"?
  A: The library started its life as "ImGui" due to the fact that I didn't give it a proper name when 
     when I released 1.0, and had no particular expectation that it would take off. However, the term IMGUI 
-    (immediate-mode graphical user interface) was coined before and is being used in variety of other 
+    (immediate-mode graphical user dbg_interface) was coined before and is being used in variety of other
     situations (e.g. Unity uses it own implementation of the IMGUI paradigm). 
     To reduce the ambiguity without affecting existing code bases, I have decided on an alternate, 
     longer name "Dear ImGui" that people can use to refer to this specific library.
@@ -9075,7 +9075,7 @@ void ImGui::EndDragDropTarget()
 //-----------------------------------------------------------------------------
 // [SECTION] LOGGING/CAPTURING
 //-----------------------------------------------------------------------------
-// All text output from the interface can be captured into tty/file/clipboard.
+// All text output from the dbg_interface can be captured into tty/file/clipboard.
 // By default, tree nodes are automatically opened during logging.
 //-----------------------------------------------------------------------------
 

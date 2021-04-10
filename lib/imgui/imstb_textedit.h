@@ -175,7 +175,7 @@
 //    STB_TEXTEDIT_K_PGDOWN      keyboard input to move cursor down a page
 //
 // Keyboard input must be encoded as a single integer value; e.g. a character code
-// and some bitflags that represent shift states. to simplify the interface, SHIFT must
+// and some bitflags that represent shift states. to simplify the dbg_interface, SHIFT must
 // be a bitflag, so we can test the shifted state of cursor movements to allow selection,
 // i.e. (STB_TEXTED_K_RIGHT|STB_TEXTEDIT_K_SHIFT) should be shifted right-arrow.
 //
@@ -252,7 +252,7 @@
 //
 // This is designed to be usable in IMGUI, so it allows for the possibility of
 // running in an IMGUI that has NOT cached the multi-line layout. For this
-// reason, it provides an interface that is compatible with computing the
+// reason, it provides an dbg_interface that is compatible with computing the
 // layout incrementally--we try to make sure we make as few passes through
 // as possible. (For example, to locate the mouse pointer in the text, we
 // could define functions that return the X and Y positions of characters

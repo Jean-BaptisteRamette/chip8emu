@@ -2,7 +2,7 @@
 #define CHIP8_EMU_WINDOW_HPP
 
 #include <memory>
-#include <chip8emu/debugger/interface.hpp>
+#include <chip8emu/debugger/dbg_interface.hpp>
 #include <chip8emu/console/console.hpp>
 #include <chip8emu/emulator/chip8.hpp>
 #include <SDL2/SDL.h>
@@ -37,13 +37,15 @@ public:
     window &operator=(window &&) = delete;
 
     void mainloop();
-
     void set_title(const char* title) const noexcept;
 
 private:
     void init_rendering_context();
-    void handle_events(SDL_Event* event, bool& keep_looping);
+    void handle_events(SDL_Event& event, bool& keep_looping);
     void render();
+
+    void show_error(const emu::opcode_decoding_error& error) const;
+    void show_error(const emu::memory_access_error& error) const;
 
 private:
     std::unique_ptr<SDL_Window, SDLWindowDestroyer> m_handle;
@@ -51,9 +53,8 @@ private:
     SDL_GLContext m_gl_context;
 
     emu::chip8 m_chip8emu;
-    csl::console m_console;
-    dbg::interface m_debugger_ui;
-
+    dbg::dbg_interface m_debugger_ui;
+    csl::console m_console_ui;
 };
 
 #endif //CHIP8_EMU_WINDOW_HPP

@@ -1,11 +1,12 @@
 #ifndef CHIP8_EMU_PROCESSOR_HPP
 #define CHIP8_EMU_PROCESSOR_HPP
 
-#include <chip8emu/inttypes.hpp>
 #include <stdexcept>
 #include <cstdint>
 #include <random>
 #include <array>
+#include <bitset>
+#include <chip8emu/inttypes.hpp>
 
 
 class debugger;
@@ -27,6 +28,16 @@ namespace emu
     };
 
     struct device_bus;
+
+
+    enum proc_flags : u8
+    {
+        /* as we use std::bitset indexing, these values do not represent a bitmask but a bit position */
+        HALT = 0,
+        DRAW = 1,
+        DECODE_ERROR = 2,
+        MEMORY_ERROR = 3
+    };
 
     class processor final
     {
@@ -57,12 +68,11 @@ namespace emu
 
         /* update_frame the delay timer */
         void tick() noexcept;
-
         [[nodiscard]] u8 timer() const noexcept;
-        [[nodiscard]] bool draw_flag_set() const noexcept;
 
-        /* sets draw flag to false */
-        void reset_draw_flag() noexcept;
+        void flip_flag(proc_flags flag) noexcept;
+        void set_flag(proc_flags flag, bool value = true) noexcept;
+        [[nodiscard]] bool is_flag_set(proc_flags flag) const noexcept;
 
         /* CHIP-8 has 34 instructions, they are described here https://en.wikipedia.org/wiki/CHIP-8#Opcode_table ! */
         void invalid_opcode() const;
@@ -102,13 +112,13 @@ namespace emu
         std::array<u16, STACK_SIZE> stack;
 
         /* special registers */
-        u16 PC;      /* address of the current instruction */
-        u16 I  {};   /* special register, stores m_memory addresses */
-        u8  SP {};   /* points to the top of the stack */
+        u16 PC {};       /* address of the current instruction */
+        u16 I  {};       /* special register, stores m_memory addresses */
+        u8  SP {};       /* points to the top of the stack */
+        u8  DT {255 };   /* delay timer to control CPU clock cycle */
 
-        u16 opcode {};        /* current operation code */
-        u8  delay_timer { 255 };   /* timer to control CPU clock cycle */
-        bool draw_flag { true };
+        u16 opcode {};            /* current operation code */
+        std::bitset<8> flags {};  /* contains draw flag and halt flag */
     };
 }
 
