@@ -40,7 +40,7 @@ namespace csl
     public:
         console() noexcept;
 
-        void update() override;
+        void show() override;
 
         static constexpr float WIDTH  { 400 };
         static constexpr float HEIGHT { emu::screen_display::SCALED_HEIGHT };

@@ -11,7 +11,7 @@ void debugger::attach_process_handle(emu::chip8& chip8) noexcept
 
 bool debugger::has_process_handle() const noexcept
 {
-    return m_emulator != nullptr;
+    return m_emulator && m_processor && m_memory;
 }
 
 void debugger::check_breakpoints()
@@ -71,12 +71,12 @@ void debugger::set_stack_value(u8 st_index, u8 value) noexcept
     m_processor->stack[st_index] = value;
 }
 
-[[nodiscard]] bool debugger::add_breakpoint(emu::address_type address)
+[[nodiscard]] bool debugger::add_breakpoint(address_type address)
 {
     return m_breakpoints.insert(address).second;
 }
 
-[[nodiscard]] bool debugger::remove_breakpoint(emu::address_type address)
+[[nodiscard]] bool debugger::remove_breakpoint(address_type address)
 {
     return m_breakpoints.erase(address);
 }

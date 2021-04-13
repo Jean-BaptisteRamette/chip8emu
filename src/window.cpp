@@ -36,7 +36,7 @@ window::window() :
     init_rendering_context();
 
     /* Try to load a game */
-    const emu::cartridge game_cart("../roms/BRIX");
+    const emu::cartridge game_cart("../roms/INVADERS");
     m_chip8emu.insert_cartridge(game_cart);
     m_chip8emu.dev_bus.apu.mute();
 
@@ -101,7 +101,7 @@ void window::mainloop()
         /*
          * FIXME: We should only  call update_frame when the draw flag is set
          *        Meaning that a draw instruction has been executed and we
-         *        should update the emulator display.
+         *        should show the emulator display.
          *
          * FIXME: But when we do that, the ImGui windows don't render, because
          *        SDL_UpdateTexture() isn't called, but this function is not
@@ -127,8 +127,8 @@ void window::mainloop()
         ImGui_ImplSDL2_NewFrame(m_handle.get());
         ImGui::NewFrame();
 
-        m_console_ui.update();
-        m_debugger_ui.update();
+        m_console_ui.show();
+        m_debugger_ui.show();
 
         // Perhaps we should just use flags instead of exceptions
         // show_error(decode_error);

@@ -8,8 +8,6 @@
 
 namespace emu
 {
-    using address_type = u16;
-
     /* useful for the debugger */
     class memory_access_error : public std::runtime_error
     {
@@ -35,7 +33,7 @@ namespace emu
          */
 
     public:
-        static constexpr address_type SIZE { 0xFFF };
+        static constexpr address_type SIZE { 0x1000 };
         static constexpr address_type FONT_CHAR_SIZE { 5 };
         static constexpr address_type FONT_ADDRESS { 0x50  };
         static constexpr address_type CODE_ADDRESS { 0x200 };
@@ -52,6 +50,9 @@ namespace emu
         /* read and write operations */
               u8 &operator[](address_type address);
         const u8 &operator[](address_type address) const;
+
+        /* do not remove this as we need this for dumping it to a file */
+        u8* data() noexcept;
 
         void load_machine_code(const std::vector<u8> &binary);
 

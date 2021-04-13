@@ -42,10 +42,10 @@ public:
     void set_stack_value(u8 st_index, u8 value) noexcept;
 
     /* try to insert a breakpoint, if it already exists, return false */
-    [[nodiscard]] bool add_breakpoint(emu::address_type address);
+    [[nodiscard]] bool add_breakpoint(address_type address);
 
     /* remove a breakpoint, if failed, return false */
-    [[nodiscard]] bool remove_breakpoint(emu::address_type address);
+    [[nodiscard]] bool remove_breakpoint(address_type address);
 
     /* pause or unpause the current process */
     void pause_process() const;
@@ -62,7 +62,7 @@ protected:
     emu::memory *m_memory { nullptr };
 
     /* breakpoints are sorted from lowest address to highest address */
-    std::set<emu::address_type> m_breakpoints;
+    std::set<address_type> m_breakpoints;
 };
 
 #endif //CHIP8_EMU_DEBUGGER_HPP

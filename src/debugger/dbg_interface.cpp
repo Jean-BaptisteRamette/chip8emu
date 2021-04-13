@@ -1,24 +1,13 @@
 #include <chip8emu/debugger/dbg_interface.hpp>
-#include <string_view>
-#include <array>
-
 
 namespace dbg
 {
-
-static constexpr std::array<std::string_view, emu::processor::REG_COUNT> reg_names {
-    "R0", "R1", "R2", "R3",
-    "R4", "R5", "R6", "R7",
-    "R8", "R9", "RA", "RB",
-    "RC", "RD", "RE", "RF"
-};
-
 
 dbg_interface::dbg_interface() noexcept
     : imgui_window_base("Debugger", {POS_X, POS_Y}, {WIDTH, HEIGHT})
 {}
 
-void dbg_interface::update()
+void dbg_interface::show()
 {
     check_breakpoints();
 
@@ -26,22 +15,29 @@ void dbg_interface::update()
 
     if (ImGui::BeginTabBar("DebuggerInterfaceTabBar"))
     {
-        if (ImGui::BeginTabItem("Debugger"))
+        if (ImGui::BeginTabItem("CPU"))
         {
             if (ImGui::Button("Pause")) pause_process(); ImGui::SameLine();
             if (ImGui::Button("Next")) step_next(); ImGui::SameLine();
             if (ImGui::Button("Rerun")) {}
 
-            if (ImGui::CollapsingHeader("Breakpoints")) show_breakpoints();
             if (ImGui::CollapsingHeader("Registers")) show_registers();
             if (ImGui::CollapsingHeader("Stack")) show_stack();
 
             ImGui::EndTabItem();
         }
 
+        if (ImGui::BeginTabItem("Breakpoints"))
+        {
+            show_breakpoints();
+            ImGui::EndTabItem();
+        }
+
         if (ImGui::BeginTabItem("Memory Editor"))
         {
-            ImGui::Text("Welcome to the memory editor !");
+            if (has_process_handle())
+                mem_edit.show(*m_memory);
+
             ImGui::EndTabItem();
         }
 
@@ -58,7 +54,7 @@ void dbg_interface::show_breakpoints() const
     ImGui::BeginChild("BreakpointsArea", ImVec2(0, area_height));
     ImGui::Columns(2);
 
-    for (const emu::address_type breakpoint : m_breakpoints)
+    for (const address_type breakpoint : m_breakpoints)
     {
         ImGui::Text("%hu", breakpoint);
         ImGui::NextColumn();
@@ -98,7 +94,7 @@ void dbg_interface::show_general_registers()
     {
         for (u8 i {}; i < m_processor->REG_COUNT; ++i)
         {
-            ImGui::TextUnformatted(reg_names[i].data());
+            ImGui::Text("R%X", i);
             ImGui::NextColumn();
 
             auto regv { get_gp_reg_value(i) };
@@ -114,7 +110,7 @@ void dbg_interface::show_general_registers()
     {
         for (u8 i {}; i < m_processor->REG_COUNT; ++i)
         {
-            ImGui::TextUnformatted(reg_names[i].data());
+            ImGui::Text("R%X", i);
             ImGui::NextColumn();
 
             ImGui::Text("%hhu", debugger::get_gp_reg_value(i));
@@ -212,4 +208,5 @@ void dbg_interface::show_stack()
         }
     }
 }
+
 }

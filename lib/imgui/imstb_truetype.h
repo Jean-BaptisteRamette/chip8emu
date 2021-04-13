@@ -378,7 +378,7 @@ int main(int arg, char **argv)
    stbtt_fontinfo font;
    int i,j,ascent,baseline,ch=0;
    float scale, xpos=2; // leave a little padding in case the character extends left
-   char *text = "Heljo World!"; // intentionally misspelled to update 'lj' brokenness
+   char *text = "Heljo World!"; // intentionally misspelled to show 'lj' brokenness
 
    fread(buffer, 1, 1000000, fopen("c:/windows/fonts/arialbd.ttf", "rb"));
    stbtt_InitFont(&font, buffer, 0);
@@ -538,7 +538,7 @@ STBTT_DEF int stbtt_BakeFontBitmap(const unsigned char *data, int offset,  // fo
                                 stbtt_bakedchar *chardata);             // you allocate this, it's num_chars long
 // if return is positive, the first unused row of the bitmap
 // if return is negative, returns the negative of the number of characters that fit
-// if return is 0, no characters fit and no rows were used
+// if return is 0, no characters fit and no m_rows were used
 // This uses a very crappy packing.
 
 typedef struct
@@ -2853,7 +2853,7 @@ static void stbtt__rasterize_sorted_edges(stbtt__bitmap *result, stbtt__edge *e,
          float scan_y = y + 0.5f;
          stbtt__active_edge **step = &active;
 
-         // update all active edges;
+         // show all active edges;
          // remove all active edges that terminate before the center of this scanline
          while (*step) {
             stbtt__active_edge * z = *step;
@@ -3162,7 +3162,7 @@ static void stbtt__rasterize_sorted_edges(stbtt__bitmap *result, stbtt__edge *e,
       STBTT_memset(scanline , 0, result->w*sizeof(scanline[0]));
       STBTT_memset(scanline2, 0, (result->w+1)*sizeof(scanline[0]));
 
-      // update all active edges;
+      // show all active edges;
       // remove all active edges that terminate before the top of this scanline
       while (*step) {
          stbtt__active_edge * z = *step;

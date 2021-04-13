@@ -1,10 +1,10 @@
 #ifndef CHIP8_EMU_IMGUI_WINDOW_BASE_HPP
 #define CHIP8_EMU_IMGUI_WINDOW_BASE_HPP
 
-#include <string_view>
-#include <imgui/imgui.h>
 #include <chip8emu/inttypes.hpp>
 #include <chip8emu/emulator/screen_display.hpp>
+#include <string_view>
+#include <imgui/imgui.h>
 
 
 class imgui_window_base
@@ -15,7 +15,7 @@ public:
 
     virtual ~imgui_window_base() noexcept = default;
 
-    virtual void update() = 0;
+    virtual void show() = 0;
 
 protected:
     virtual bool begin(ImGuiWindowFlags flags = 0) const

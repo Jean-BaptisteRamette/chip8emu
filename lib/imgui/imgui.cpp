@@ -14,7 +14,7 @@
 // Businesses: you can support continued maintenance and development via support contracts or sponsoring, see docs/README.
 // Individuals: you can support continued maintenance and development via donations or Patreon https://www.patreon.com/imgui.
 
-// It is recommended that you don't modify imgui.cpp! It will become difficult for you to update the library.
+// It is recommended that you don't modify imgui.cpp! It will become difficult for you to show the library.
 // Note that 'ImGui::' being a namespace, you can add functions into the namespace from your own source files, without
 // modifying imgui.h or imgui.cpp. You may include imgui_internal.h to access internal data structures, but it doesn't
 // come with any guarantee of forward compatibility. Discussing your changes on the GitHub Issue Tracker may lead you
@@ -35,7 +35,7 @@ DOCUMENTATION
   - This is how a simple application may look like (2 variations).
   - This is how a simple rendering function may look like.
   - Using gamepad/keyboard navigation controls.
-- API BREAKING CHANGES (read me when you update!)
+- API BREAKING CHANGES (read me when you show!)
 - FREQUENTLY ASKED QUESTIONS (FAQ), TIPS
   - Where is the documentation?
   - Which version should I get?
@@ -512,7 +512,7 @@ CODE
                        you need to render your textured triangles with bilinear filtering to benefit from sub-pixel positioning of text.
  - 2015/07/08 (1.43) - switched rendering data to use indexed rendering. this is saving a fair amount of CPU/GPU and enables us to get anti-aliasing for a marginal cost.
                        this necessary change will break your rendering function! the fix should be very easy. sorry for that :(
-                     - if you are using a vanilla copy of one of the imgui_impl_XXXX.cpp provided in the example, you just need to update your copy and you can ignore the rest.
+                     - if you are using a vanilla copy of one of the imgui_impl_XXXX.cpp provided in the example, you just need to show your copy and you can ignore the rest.
                      - the signature of the io.RenderDrawListsFn handler has changed!
                        old: ImGui_XXXX_RenderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count)
                        new: ImGui_XXXX_RenderDrawLists(ImDrawData* draw_data).
@@ -3611,7 +3611,7 @@ void ImGui::UpdateHoveredWindowAndCaptureFlags()
     if (g.IO.NavActive && (g.IO.ConfigFlags & ImGuiConfigFlags_NavEnableKeyboard) && !(g.IO.ConfigFlags & ImGuiConfigFlags_NavNoCaptureKeyboard))
         g.IO.WantCaptureKeyboard = true;
 
-    // Update io.WantTextInput flag, this is to allow systems without a keyboard (e.g. mobile, hand-held) to update a software keyboard if possible
+    // Update io.WantTextInput flag, this is to allow systems without a keyboard (e.g. mobile, hand-held) to show a software keyboard if possible
     g.IO.WantTextInput = (g.WantTextInputNextFrame != -1) ? (g.WantTextInputNextFrame != 0) : false;
 }
 
@@ -5467,7 +5467,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
         window->IDStack.resize(1);
 
         // Update stored window name when it changes (which can _only_ happen with the "###" operator, so the ID would stay unchanged).
-        // The title bar always display the 'name' parameter, so we only update the string storage if it needs to be visible to the end-user elsewhere.
+        // The title bar always display the 'name' parameter, so we only show the string storage if it needs to be visible to the end-user elsewhere.
         bool window_title_visible_elsewhere = false;
         if (g.NavWindowingList != NULL && (window->Flags & ImGuiWindowFlags_NoNavFocus) == 0)   // Window titles visible when using CTRL+TAB
             window_title_visible_elsewhere = true;
@@ -8630,7 +8630,7 @@ static void ImGui::NavUpdateWindowing()
             g.NavInputSource = start_windowing_with_keyboard ? ImGuiInputSource_NavKeyboard : ImGuiInputSource_NavGamepad;
         }
 
-    // Gamepad update
+    // Gamepad show
     g.NavWindowingTimer += g.IO.DeltaTime;
     if (g.NavWindowingTarget && g.NavInputSource == ImGuiInputSource_NavGamepad)
     {

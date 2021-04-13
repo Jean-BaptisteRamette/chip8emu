@@ -44,6 +44,11 @@ namespace emu
         return m_ram[address];
     }
 
+    u8* memory::data() noexcept
+    {
+        return m_ram.data();
+    }
+
     void memory::load_machine_code(const std::vector<u8> &binary)
     {
         std::copy_n(std::begin(binary), std::size(binary), std::begin(m_ram) + CODE_ADDRESS);
