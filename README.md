@@ -1,3 +1,3 @@
 # chip8emu
 
-Emulator, debugger, m_memory editor, assembler and disassembler for the chip-8 virtual machine
+Emulator, debugger, memory editor, assembler and disassembler (WIP check my ccomp repo) for the chip-8 virtual machine
